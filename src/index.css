@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* FullCalendar */
+/* Dark / Light Mode */
+.fc {
+    --fc-border-color: #ddd;
+    --fc-bg-color: #fff;
+    --fc-text-color: #111;
+}
+.dark .fc {
+    --fc-border-color: #6b7280;
+    --fc-bg-color: #1f2937;
+    --fc-text-color: #fff;
+    background-color: var(--fc-bg-color);
+    color: var(--fc-text-color);
+}
+.dark .fc-toolbar-title {
+    color: #fff;
+}
+.dark .fc-button {
+    background-color: #374151 !important;
+    border-color: #374151 !important;
+    color: #fff !important;
+}
+.dark .fc-button-active {
+    background-color: #1E40AF !important;
+    border-color: #1E40AF !important;
+}
+.dark .fc-daygrid-day-number {
+    color: #ddd;
+}
+.dark .fc-day-today {
+    background-color: #1E40AF !important;
+}
+.dark .fc-day-disabled {
+    background-color: #374151 !important;
+}
+
+/* FullCalendar More Popover */
+.fc-more-popover .fc-popover-body {
+    max-height: 200px;
+    overflow-y: auto;
+}
+.fc-more-popover .fc-popover-body::-webkit-scrollbar {
+    width: 6px;
+}
+.fc-more-popover .fc-popover-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+.fc-daygrid-event-harness {
+  overflow: visible !important;
+}
+.fc-daygrid-event-harness {
+    overflow: visible !important;
+}
+.fc-daygrid-day-events {
+    overflow: visible !important;
+}
+
+
+.datepicker-cell.today {
+    @apply bg-blue-600 text-white font-semibold rounded-lg !important;
+}
+
+.dark .datepicker-cell.today {
+    @apply bg-blue-400 text-gray-900 !important;
+}
+
+
+/* ApexChart */
+.apexcharts-canvas .apexcharts-legend .apexcharts-legend-text {
+    font-size: 12px !important;
+}
+.dark .apexcharts-canvas .apexcharts-legend-text {
+    color: #fff !important;
+}
+.apexcharts-canvas .apexcharts-legend-text span {
+    color: #000 !important;
+}
+.dark .apexcharts-canvas .apexcharts-datalabels-group .apexcharts-text.apexcharts-datalabel-label {
+    fill: #fff !important;
+}
+.apexcharts-canvas .apexcharts-datalabels-group .apexcharts-text.apexcharts-datalabel-label {
+    fill: #000 !important;
+}
