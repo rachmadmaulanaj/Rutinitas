@@ -6,7 +6,7 @@ export default function Header({ page, setPage }) {
     return (
         <Navbar className='w-full'>
             <NavbarBrand href="#">
-                <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="Rutinitas Logo" />
+                <img src="./logo.png" className="mr-3 h-6 sm:h-9" alt="Rutinitas Logo" />
                 <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Rutinitas</span>
             </NavbarBrand>
             <div className="flex md:order-2">
