@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import moment from '@/utils/momentConfig'
+import supabase from '@/lib/supabaseClient'
 
+import Loader from '@/components/Loader'
 import Header from '@/components/Header'
+import PageAuth from '@/pages/auth/Page'
 import PageCalendar from '@/pages/calendar/Page'
 import PageChart from '@/pages/chart/Page'
 
@@ -9,7 +12,7 @@ import { getDataActivityByPeriod } from '@/services/activityService'
 import { getDataCategory } from '@/services/categoryService'
 
 function App() {
-	const [page, setPage] = useState('calendar');
+	const [page, setPage] = useState('');
 	const [selectedDate, setSelectedDate] = useState(moment().toDate());
 	const [fullCalendarApi, setFullCalendarApi] = useState(null);
 	const [period, setPeriod] = useState({ month: moment().format('M'), year: moment().format('YYYY') });
@@ -57,10 +60,42 @@ function App() {
 		}
 	};
 
+	const checkSessionLocalStorage = async () => {
+		const sessionData = localStorage.getItem('session_data');
+		const sessionDataFormat = moment(sessionData, "YYYY-MM-DD HH:mm:ss");
+
+		if (!sessionDataFormat.isValid()) {
+			localStorage.removeItem('session_data');
+			localStorage.removeItem('user_id');
+			await supabase.auth.signOut();
+			setPage('auth');
+			return;
+		}
+
+		const now = moment();
+		const diffInHours = now.diff(sessionDataFormat, 'hours');
+
+		if (diffInHours >= 24) {
+			localStorage.removeItem('session_data');
+			localStorage.removeItem('user_id');
+			await supabase.auth.signOut();
+			setPage('auth');
+			return;
+		}
+
+		localStorage.setItem('session_data', now.format("YYYY-MM-DD HH:mm:ss"));
+		setPage('calendar');
+	};
+
 	/* useEffect */
 	useEffect(() => {
-		loadDataCategory();
+		checkSessionLocalStorage();
 	}, []);
+
+	useEffect(() => {
+		if (page !== 'calendar' && page !== 'chart') return;
+		loadDataCategory();
+	}, [page]);
 
 	useEffect(() => {
 		if (!selectedDate) return;
@@ -78,15 +113,17 @@ function App() {
 		loadDataActivity();
 	}, [period, categories]);
 
-	return (
-		<div className='w-full h-screen flex flex-col bg-gray-100 dark:bg-gray-700'>
-			<Header
-				page={page}
-				setPage={setPage}
-			/>
+	if (page === '') return <Loader />;
+	if (page === 'auth') return <PageAuth setPage={setPage} />;
+	if (page === 'calendar' || page === 'chart') {
+		return (
+			<div className='w-full h-screen flex flex-col bg-gray-100 dark:bg-gray-700'>
+				<Header
+					page={page}
+					setPage={setPage}
+				/>
 
-			{
-				page == 'calendar' ? (
+				{page === 'calendar' ? (
 					<PageCalendar
 						selectedDate={selectedDate}
 						activities={activities}
@@ -95,21 +132,23 @@ function App() {
 						setSelectedDate={setSelectedDate}
 						setFullCalendarApi={setFullCalendarApi}
 						loadDataActivity={loadDataActivity}
-					/>) : ''
-			}
-			{
-				page == 'chart' ? (
+					/>
+				) : null}
+				{page === 'chart' ? (
 					<PageChart
 						selectedDate={selectedDate}
 						activities={activities}
 						categories={categories}
 						fullCalendarApi={fullCalendarApi}
 						setSelectedDate={setSelectedDate}
-					/>) : ''
-			}
+					/>
+				) : null}
 
-		</div>
-	)
+			</div>
+		)
+	}
+
+	return null;
 }
 
 export default App
