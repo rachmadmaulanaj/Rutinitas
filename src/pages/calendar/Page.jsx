@@ -115,17 +115,21 @@ export default function Page({ selectedDate, activities, categories, fullCalenda
             didOpen: () => { Swal.showLoading(); }
         });
 
-        const dataInput = {
-            datestart: moment(formData.datestart).seconds(0).format('YYYY-MM-DD HH:mm:ss'),
-            dateend: moment(formData.dateend).seconds(0).format('YYYY-MM-DD HH:mm:ss'),
-            name: formData.name,
-            description: formData.description,
-            category_id: formData.category,
-            location: formData.location,
-            primary: formData.primary
-        };
-
         try {
+            const userId = localStorage.getItem('user_id');
+            if (!userId) throw new Error('User ID tidak ditemukan');
+
+            const dataInput = {
+                datestart: moment(formData.datestart).seconds(0).format('YYYY-MM-DD HH:mm:ss'),
+                dateend: moment(formData.dateend).seconds(0).format('YYYY-MM-DD HH:mm:ss'),
+                name: formData.name,
+                description: formData.description,
+                category_id: formData.category,
+                location: formData.location,
+                primary: formData.primary,
+                user_id: userId
+            };
+        
             if (formData.idEdit) {
                 const resultEdit = await updateActivity(formData.idEdit, dataInput);
                 if (resultEdit.error) throw resultEdit.error;

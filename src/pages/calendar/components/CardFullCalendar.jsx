@@ -99,7 +99,7 @@ export default function Calendar({ events, setFullCalendarApi, selectedDate, set
                             datestart: info.event.start,
                             dateend: info.event.end,
                             name: info.event.title,
-                            description: info.event.title,
+                            description: info.event.extendedProps.description,
                             category: info.event.extendedProps.categoryId,
                             location: info.event.extendedProps.location,
                             primary: info.event.extendedProps.primary,
